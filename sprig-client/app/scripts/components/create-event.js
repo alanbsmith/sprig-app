@@ -302,7 +302,7 @@ let InfoPanel = React.createClass({
 });
 let InvitePanel = React.createClass({
   handleClick() {
-    attendee = React.findDOMNode(this.refs.attendeeName).value.trim();
+    let attendee = React.findDOMNode(this.refs.attendee).value.trim();
     this.props.addAttendee({attendee: attendee})
   },
   render() {
@@ -315,9 +315,9 @@ let InvitePanel = React.createClass({
         </a>
         <div id='collapseThree' className='panel-collapse collapse' role='tabpanel' aria-labelledby='calendar'>
           <div className='panel-body'>
-            <p className='text-muted'>Add attendees.</p>
+            <p className='text-muted'>Add an attendee.</p>
             <div className='form-horizontal'>
-              <input id='title' className='form-control' ref='attendeeName' placeholder="Attendee's name"></input>
+              <input id='title' className='form-control' ref='attendee' placeholder="add a Twitter handle here! (e.g. @_alanbsmith)"></input>
               <button onClick={this.handleClick} id='attendee-btn' className='btn btn-block'>Next</button>
             </div>
           </div>

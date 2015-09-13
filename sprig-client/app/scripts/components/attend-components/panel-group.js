@@ -25,7 +25,7 @@ let PanelGroup = React.createClass({
   },
   componentDidMount() {
     $.ajax({
-      url: 'http://localhost:3000/api/v1/events/1',
+      url: 'http://localhost:3000/api/v1/events/' + this.props.eventID,
       dataType: 'json',
       type: 'get',
       success: function(data) {

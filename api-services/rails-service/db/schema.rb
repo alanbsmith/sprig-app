@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 20150912023731) do
     t.string   "location",    null: false
     t.string   "latitude",    null: false
     t.string   "longitude",   null: false
+    t.string   "url"
+    t.string   "attendee"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

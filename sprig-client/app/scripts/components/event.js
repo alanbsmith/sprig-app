@@ -14,20 +14,19 @@ let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 //      - ConfirmPanel
 //    
 
-let AttendEvent = React.createClass({
+let Event = React.createClass({
   getInitialState() {
     return{renderCompleteButton: false};
   },
-  togglePanel(data) {
+    togglePanel(data) {
     this.setState({renderCompleteButton: !this.state.renderCompleteButton});
   },
-
   render() {
     return (
       <div>
         <div className='container'>
           <CompleteButton display={this.state.renderCompleteButton} onClick={this.togglePanel}/>
-          <PanelGroup display={!this.state.renderCompleteButton} confirmation={this.togglePanel}/>
+          <PanelGroup eventID={this.props.params.id} display={!this.state.renderCompleteButton} confirmation={this.togglePanel}/>
         </div>
       </div>
     )
@@ -53,4 +52,4 @@ let CompleteButton = React.createClass({
   }
 })
 
-export default AttendEvent;
+export default Event;

@@ -4,7 +4,7 @@ import { Route, Link, RouteHandler, DefaultRoute } from 'react-router';
 
 import About from './components/about';
 import CreateEvent from './components/create-event';
-import AttendEvent from './components/attend-event';
+import Event from './components/event';
 import Greeting from "./greeting";
 
 let App = React.createClass({
@@ -67,8 +67,8 @@ let TitlePanel = React.createClass({
 
 let routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="create-event" path='/create' handler={CreateEvent}/>
-    <Route name="attend-event" path='/attend' handler={AttendEvent}/>
+    <Route name="create-event" path='/events/create' handler={CreateEvent}/>
+    <Route name="event" path='/events/:id' handler={Event}/>
     <Route name="about" path='/about' handler={About}/>
   </Route>
 );
