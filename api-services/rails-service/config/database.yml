@@ -1,0 +1,18 @@
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: rails-service_development
+test:
+  <<: *default
+  database: rails-service_test
+
+production:
+  <<: *default
+  database: rails-service_production
+  username: rails-service
+  password: <%= ENV['RAILS-SERVICE_DATABASE_PASSWORD'] %>

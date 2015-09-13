@@ -1,0 +1,7 @@
+#client
+sprig-client/node_modules
+*.DS_Store
+
+#api
+api-services/rails-service/config/secrets.yml
+api-services/rails-service/config/initializers/secret_token.rb

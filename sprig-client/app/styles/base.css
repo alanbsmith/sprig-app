@@ -1,0 +1,295 @@
+html, body {
+  height: 100%;
+  margin-bottom: 120px;
+}
+
+a, a:active, a:hover, a:focus {
+  outline: 0;
+  text-decoration: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 0; 
+  width: 100%; 
+  height: 100px; 
+  background-color: #262626; 
+  padding-top: 5px;
+}
+
+input.form-control {
+  margin-bottom: 10px;
+}
+
+input.form-control:focus {
+  box-shadow: 0px -2px 0px #33ffbc inset;
+}
+
+p {
+  font-size: 16px;
+  color:  #262626;
+}
+
+#logo {
+  color: #000000;
+}
+
+#sprig {
+  height: 30px;
+  position: relative;
+  left: -63px;
+  top: -35px;
+}
+
+#btn-start {
+  background-color: #00e59a;
+  color: #ffffff;
+  border-radius: 0px;
+}
+
+#btn-start:hover {
+  background-color: #33ffbc; 
+}
+
+.example-appear {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+}
+
+.panel-group .panel {
+  border-radius: 0px;
+}
+
+.panel-group {
+  margin-bottom: 3px;
+}
+
+.panel-heading {
+  border-radius: 0;
+  background-color: #00e59a;
+  color: #ffffff;
+  height: 60px;
+}
+
+.panel-heading:hover {
+  background-color: #33ffbc;
+}
+
+.panel-heading h1 {
+  margin-top: 8px;
+}
+.panel:active {
+  text-decoration: none;
+}
+
+.panel-title {
+  font-size: 24px;
+}
+
+.col-xs-1 {
+  padding: 1px;
+  width: 14.28%;
+  margin-bottom: -24px;
+}
+
+.col-xs-3 {
+  padding: 1px;
+  width: 25%;
+}
+
+.dates {
+  text-align: center;
+  padding-top: 17px;
+  border-radius: 0px;
+  height: 60px;
+  display: block;
+}
+
+.date {
+  margin-top: -10px;
+  margin-bottom: 2px;
+  color: #00e59a;
+}
+
+.active .date {
+  color: #ffffff;
+}
+
+.dates:hover {
+  color: #00e59a;
+  border-color: #00e59a;
+}
+
+.calendar-heading {
+  text-align: center;
+
+}
+
+#date-row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+#dates {
+  margin-bottom: 10px;
+}
+
+#availability {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.times {
+  text-align: center;
+  padding-top: 17px;
+  margin-bottom: 1px;
+  border-radius: 0px;
+  height: 60px;
+  display: block;
+}
+
+.thumbnail.times.active {
+  color: #ffffff;
+  background-color: #00e59a;
+}
+
+.thumbnail.dates.active {
+  color: #ffffff;
+  background-color: #00e59a;
+}
+
+
+.times:hover {
+  color: #00e59a;
+  border-color: #00e59a;
+}
+
+.date-header{
+  margin-bottom: 0px;
+}
+
+#info-btn {
+  background-color: #a23ef9;
+  font-size: 18px;
+  color: #ffffff;
+  border-radius: 0px;
+}
+
+#info-btn:hover {
+  background-color: #bc33ff;
+}
+
+#attendee-btn {
+  background-color: #ffb00d;
+  font-size: 18px;
+  color: #ffffff;
+  border-radius: 0px;
+}
+
+#attendee-btn:hover {
+  background-color: #ffca5b;
+}
+
+#confirm-btn {
+  background-color: #e5004b;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #ffffff;
+  border-radius: 0px;
+}
+
+#confirm-btn:hover {
+  background-color: #ff3375;
+}
+
+/*slideout*/
+
+#slideout {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 100%
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+#slideout-inner {
+  position: absolute;
+  top: 0px;
+  right: -250px;
+  height: 100%;
+  width: 250px;
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+#slideout:hover {
+  right: 50%;
+}
+#slideout:hover #slideout_inner {
+  right: 0px;
+}
+
+.sidenav {
+  padding-top: 20px;
+  border-radius: 0px;
+  background-color: #262626;
+  position: absolute;
+  top: 0px;
+  height: 900px;
+  right: -900x;
+  width: 900px;
+  z-index: 1;
+  border-color: #262626;
+}
+
+.sidenav ul li a {
+  font-size: 16px;
+  margin-left: 10px;
+  color: #00e59a;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+  background-color: #262626;
+}
+.sidenav ul li a:hover, a:after {
+  background-color: #1c1c1c;
+  color: #33ffbc;
+}
+
+.btn-default {
+  display: block;
+  height: 60px;
+  width: 60px;
+  position: relative;
+  top: -30px;
+  right: 16px;
+  z-index: 1;
+}
+
+.btn-default:hover {
+  background-color: #ffffff;
+}
+
+.glyphicon {
+  font-size: 2em;
+}
+
+.glyphicon:hover {
+  color: #33ffbc;
+}
+
+.text-muted {
+  margin-bottom: unset;
+}
+
+#map-link {
+  color: #00e59a;
+  font-size: 16px;
+}
