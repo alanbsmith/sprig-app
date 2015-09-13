@@ -1,6 +1,5 @@
-html, body {
+body {
   height: 100%;
-  margin-bottom: 120px;
 }
 
 a, a:active, a:hover, a:focus {
@@ -30,6 +29,7 @@ p {
   color:  #262626;
 }
 
+
 #logo {
   color: #000000;
 }
@@ -41,14 +41,31 @@ p {
   top: -35px;
 }
 
-#btn-start {
-  background-color: #00e59a;
+#btn-complete {
+  position: absolute;
+  left: 30%;
+  top: 150px;
+  background-color: #ff1a65;
+  background-image: url('../images/check.png');
+  background-size: 140px 140px;
+  background-repeat: no-repeat;
+  background-position: center;
   color: #ffffff;
-  border-radius: 0px;
+  width: 200px;
+  height: 200px;
+  font-size: 36px;
+  font-weight: 100;
+  border-radius: 100px;
+  -webkit-filter: invert(100%);
+  -moz-filter: invert(100%);
+  -o-filter: invert(100%);
+  -ms-filter: invert(100%);
+  filter: invert(100%);
+  z-index: 0;
 }
 
-#btn-start:hover {
-  background-color: #33ffbc; 
+#btn-complete:hover {
+  background-color: #cc0043; 
 }
 
 .example-appear {
@@ -203,7 +220,16 @@ p {
 }
 
 #confirm-btn:hover {
-  background-color: #ff3375;
+  background-color: #ff1a65;
+}
+
+.text-muted {
+  margin-bottom: unset;
+}
+
+#map-link {
+  color: #00e59a;
+  font-size: 16px;
 }
 
 /*slideout*/
@@ -242,7 +268,7 @@ p {
   background-color: #262626;
   position: absolute;
   top: 0px;
-  height: 900px;
+  height: 1500px;
   right: -900x;
   width: 900px;
   z-index: 1;
@@ -259,8 +285,9 @@ p {
   background-color: #262626;
 }
 .sidenav ul li a:hover, a:after {
-  background-color: #1c1c1c;
-  color: #33ffbc;
+  background-color: #00e59a;
+  color: #ffffff;
+  margin-left: -5px;
 }
 
 .btn-default {
@@ -283,13 +310,4 @@ p {
 
 .glyphicon:hover {
   color: #33ffbc;
-}
-
-.text-muted {
-  margin-bottom: unset;
-}
-
-#map-link {
-  color: #00e59a;
-  font-size: 16px;
 }

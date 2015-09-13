@@ -1,5 +1,6 @@
 #client
 sprig-client/node_modules
+sprig-client/npm-debug.log
 *.DS_Store
 
 #api

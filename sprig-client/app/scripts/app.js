@@ -20,14 +20,12 @@ let App = React.createClass({
       <div>
         <div className='container'>
           <TitlePanel/>
-
         </div>
         <Sidebar/>
       </div>
     )
   }
 });
-
 
 let Sidebar = React.createClass({
   render() {
@@ -37,7 +35,7 @@ let Sidebar = React.createClass({
           <a href="#" className='navbar-brand'></a>
           <button id='slider-btn' className="btn btn-lg btn-default  icon-large glyphicon glyphicon-align-justify" type="button"></button>
           <div id="slideout-inner">
-            <div className="sidenav thumbnail">
+            <div className="sidenav">
               <ul className='nav nav-sidebar'>
                 <li><Link to='app'>Home</Link></li>
                 <li><Link to="create-event">Create an Event</Link></li>

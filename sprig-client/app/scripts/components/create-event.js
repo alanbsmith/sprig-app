@@ -1,37 +1,38 @@
 import React from 'react/addons';
 
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-var CreateEvent = React.createClass({
-  getInitialState:  function() {
-    return{renderStartButton: true, renderPanelGroup: false};
+let CreateEvent = React.createClass({
+  getInitialState() {
+    return{renderCompleteButton: false};
   },
-  togglePanel: function(data) {
-    this.setState({renderStartButton: data.display});
-    this.setState({renderPanelGroup: data.start});
+  togglePanel(data) {
+    this.setState({renderCompleteButton: !this.state.renderCompleteButton});
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <div className='container'>
-          <StartButton display={this.state.renderStartButton} onClick={this.togglePanel}/>
-          <PanelGroup display={this.state.renderPanelGroup}/>
+          <CompleteButton display={this.state.renderCompleteButton} onClick={this.togglePanel}/>
+          <PanelGroup display={!this.state.renderCompleteButton} confirmation={this.togglePanel}/>
         </div>
       </div>
     )
   }
 });
 
-var StartButton = React.createClass({
-  handleClick: function(event) {
-    this.props.onClick({start: true, display: false});
+let CompleteButton = React.createClass({
+  handleClick(event) {
+    this.props.onClick({display: !this.props.display});
   },
-  render: function() {
+  render() {
     if (this.props.display === true) {
       return (
         <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
-          <button id='btn-start' onClick={this.handleClick} className='btn btn-lg btn-block'>Get Started!</button>
+          <div className='container'>
+            <button id='btn-complete' className='btn' onClick={this.handleClick}></button>
+          </div>
         </ReactCSSTransitionGroup>
       )
     } else {
@@ -40,8 +41,8 @@ var StartButton = React.createClass({
   }
 })
 
-var PanelGroup = React.createClass({
-  getInitialState: function() {
+let PanelGroup = React.createClass({
+  getInitialState() {
     return{ dates: this.getNextWeek(),
             availableDates: [],
             info: { title: "",
@@ -52,13 +53,13 @@ var PanelGroup = React.createClass({
             availableTimeObjects: []
           }
   },
-  getNextWeek: function() {
-    var startDate = new Date();
-    var dates = [];
-    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday' ]
-    var months = ['January','February','March','April','May','June','July','August','September','October','November','December']
+  getNextWeek() {
+    let startDate = new Date();
+    let dates = [];
+    let days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday' ]
+    let months = ['January','February','March','April','May','June','July','August','September','October','November','December']
     for(let x = 0; x < 7; x++) {
-      var parsedDate = startDate.toDateString().split(' ');
+      let parsedDate = startDate.toDateString().split(' ');
       dates.push({ 
                    'displayDay':  parsedDate[0].toUpperCase(), 
                    'month':       months[startDate.getMonth()],
@@ -71,7 +72,7 @@ var PanelGroup = React.createClass({
     }
     return(dates)
   },
-  getTimes: function() {
+  getTimes() {
     return([  {'timeSlot':'7:00 AM - 8:00 AM', 'displayTime': '7-8 AM'},
               {'timeSlot':'8:00 AM - 9:00 AM', 'displayTime': '8-9 AM'},
               {'timeSlot':'9:00 AM - 10:00 AM', 'displayTime': '9-10 AM'},
@@ -86,7 +87,7 @@ var PanelGroup = React.createClass({
               {'timeSlot':'6:00 PM - 7:00 PM', 'displayTime': '6-7 PM'}
           ])
   },
-  handleDate: function(date) {
+  handleDate(date) {
     if(this.state.availableDates.some(d => d.day === date.day)) {
       console.log('date is already in the array.')
       } else {
@@ -94,7 +95,7 @@ var PanelGroup = React.createClass({
       }
       this.setState({availableDates: this.state.availableDates})
   },
-  handleTime: function(data) {
+  handleTime(data) {
     for(let i = 0; i < this.state.availableDates.length; i++) {
       if(this.state.availableDates[i].date === data.selectedDate.date) {
         this.state.availableDates[i].availableTimeSlots = data.availableTimeSlots
@@ -103,13 +104,16 @@ var PanelGroup = React.createClass({
       this.setState({availableDates: this.state.availableDates})
     }
   },
-  handleInfo: function(data) {
+  handleInfo(data) {
     this.setState({ info: { title: data.title, description: data.description, location: data.location }})
   },
-  handleAttendee: function(data) {
+  handleAttendee(data) {
     this.setState({attendee: data.attendee})
   },
-  render: function() {
+  handleConfirmation() {
+    this.props.confirmation()
+  },
+  render() {
     if(this.props.display === true) {
       return(
         <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
@@ -120,13 +124,14 @@ var PanelGroup = React.createClass({
               onDateClick={this.handleDate}
               onTimeClick={this.handleTime}/>
             <InfoPanel onClick={this.handleInfo} />
-            <InvitePanel addAttendee={this.handleAttendee}/>
+            <InvitePanel addAttendee={this.handleAttendee} />
             <ConfirmPanel
               availableDates={this.state.availableDates}
               day={this.state.day}
               month={this.state.month}
               info={this.state.info}
-              attendee={this.state.attendee} />
+              attendee={this.state.attendee} 
+              confirmation={this.handleConfirmation} />
           </div>
         </ReactCSSTransitionGroup>
     )} else {
@@ -135,11 +140,11 @@ var PanelGroup = React.createClass({
   }
 });
 
-var CalendarPanel = React.createClass({
-  getInitialState: function() {
+let CalendarPanel = React.createClass({
+  getInitialState() {
     return({ times: [], selectedDate: '', isOpen: false})
   },
-  handleDateClick: function(date) {
+  handleDateClick(date) {
     this.props.onDateClick({
                             displayDay: date.displayDay,
                             day: date.day,
@@ -150,8 +155,8 @@ var CalendarPanel = React.createClass({
                           });
     this.setState({selectedDate: date, times: date.times})
   },
-  handleTimeClick: function(timeSlots) {
-    var availableTimes = [];
+  handleTimeClick(timeSlots) {
+    let availableTimes = [];
     for(let i = 0; i < this.state.times.length; i++){
       if(timeSlots.indexOf(this.state.times[i].timeSlot) !== -1) {
         availableTimes.push(this.state.times[i])
@@ -160,7 +165,7 @@ var CalendarPanel = React.createClass({
     this.props.onTimeClick({availableTimeSlots: timeSlots, availableTimes: availableTimes, selectedDate: this.state.selectedDate});
 
   },
-  render: function() {
+  render() {
 
     return (
       <div className='panel panel-default'>
@@ -187,13 +192,13 @@ var CalendarPanel = React.createClass({
   }
 });
 
-var AvailableDate = React.createClass({
-  handleClick: function(i) {
+let AvailableDate = React.createClass({
+  handleClick(i) {
     this.props.onClick()
   },
-  render: function() {
-    var cx = React.addons.classSet;
-    var classes = cx({
+  render() {
+    let cx = React.addons.classSet;
+    let classes = cx({
       'thumbnail': true,
       'dates': true,
       'active': this.props.isSelected
@@ -209,8 +214,8 @@ var AvailableDate = React.createClass({
   }
 });
 
-var TimeSlots = React.createClass({
-  selectedTimes: function(time) {
+let TimeSlots = React.createClass({
+  selectedTimes(time) {
     for(let i = 0; i < this.props.availableDates.length; i++) {
       if(this.props.availableDates[i].date === this.props.date.date) {
         return this.props.availableDates[i].availableTimeSlots
@@ -218,8 +223,8 @@ var TimeSlots = React.createClass({
     }
   },
 
-  handleClick: function(time) {
-    var availableTimes = this.selectedTimes();
+  handleClick(time) {
+    let availableTimes = this.selectedTimes();
       if(availableTimes.indexOf(time.timeSlot) !== -1) {
         availableTimes.splice(availableTimes.indexOf(time.timeSlot), 1)
       } else {
@@ -227,7 +232,7 @@ var TimeSlots = React.createClass({
       }
     this.props.onClick(availableTimes)
   },
-  render: function() {
+  render() {
     return (
       <div>
         <h6 className='text-muted calendar-heading' id='availability'>AVAILABILITY</h6>
@@ -242,13 +247,13 @@ var TimeSlots = React.createClass({
   }
 });
 
-var AvailableTime = React.createClass({
-  handleClick: function(i) {
+let AvailableTime = React.createClass({
+  handleClick(i) {
     this.props.onClick()
   },
-  render: function() {
-    var cx = React.addons.classSet;
-    var classes = cx({
+  render() {
+    let cx = React.addons.classSet;
+    let classes = cx({
       'thumbnail': true,
       'times': true,
       'active': this.props.isSelected
@@ -263,16 +268,16 @@ var AvailableTime = React.createClass({
   }
 })
 
-var InfoPanel = React.createClass({
-  handleInfo: function(event) {
+let InfoPanel = React.createClass({
+  handleInfo(event) {
     event.preventDefault();
-    var title = React.findDOMNode(this.refs.title).value.trim();
-    var description = React.findDOMNode(this.refs.description).value.trim();
-    var location = React.findDOMNode(this.refs.location).value.trim();
+    let title = React.findDOMNode(this.refs.title).value.trim();
+    let description = React.findDOMNode(this.refs.description).value.trim();
+    let location = React.findDOMNode(this.refs.location).value.trim();
     this.props.onClick({title: title, description: description, location: location})
   },
 
-  render: function() {
+  render() {
     return (
       <div className='panel panel-default'>
         <a id='info-panel' data-toggle='collapse' data-parent='#accordion' href='#collapseTwo' aria-expanded='true' aria-controls='collapseOne'>
@@ -295,12 +300,12 @@ var InfoPanel = React.createClass({
     )
   }
 });
-var InvitePanel = React.createClass({
-  handleClick: function() {
+let InvitePanel = React.createClass({
+  handleClick() {
     attendee = React.findDOMNode(this.refs.attendeeName).value.trim();
     this.props.addAttendee({attendee: attendee})
   },
-  render: function() {
+  render() {
     return (
       <div className='panel panel-default'>
         <a id='invite-panel' data-toggle='collapse' data-parent='#accordion' href='#collapseThree' aria-expanded='true' aria-controls='collapseThree'>
@@ -322,8 +327,12 @@ var InvitePanel = React.createClass({
   }
 });
 
-var ConfirmPanel = React.createClass({
-  sendData: function() {
+let ConfirmPanel = React.createClass({
+  handleClick() {
+    this.sendData();
+    this.props.confirmation()
+  },
+  sendData() {
     $.ajax({
       url: "http://localhost:3000/api/v1/events/new",
       type: 'get',
@@ -334,7 +343,7 @@ var ConfirmPanel = React.createClass({
       }
     })
   },
-  render: function() {
+  render() {
     return(
       <div className='panel panel-default'>
         <a id='info-panel' data-toggle='collapse' data-parent='#accordion' href='#collapseFour' aria-expanded='true' aria-controls='collapseFour'>
@@ -354,7 +363,7 @@ var ConfirmPanel = React.createClass({
             <p className='text-muted'>{this.props.attendee}</p>
               {this.props.availableDates.map(function(date, i){
                 if(date.availableTimeSlots.length > 0) {
-                var times = date.availableTimeSlots.map(function(time, i) {
+                let times = date.availableTimeSlots.map(function(time, i) {
                   return(
                     <p className='small text-muted available-times'>{time}, </p>
                     )
@@ -369,7 +378,7 @@ var ConfirmPanel = React.createClass({
                 return(false)
               }}, this)}
             </div>
-            <button id="confirm-btn" onClick={this.sendData} className="btn btn-block">Confirm?</button>
+            <button id="confirm-btn" onClick={this.handleClick} className="btn btn-block">Confirm?</button>
           </div>
         </div>
       </div>
