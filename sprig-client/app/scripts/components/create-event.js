@@ -15,7 +15,7 @@ let CreateEvent = React.createClass({
       <div>
         <div className='container'>
           <CompleteButton display={this.state.renderCompleteButton} onClick={this.togglePanel}/>
-          <PanelGroup display={!this.state.renderCompleteButton} confirmation={this.togglePanel}/>
+          <PanelGroup display={!this.state.renderCompleteButton} currentUser={this.props.currentUser} confirmation={this.togglePanel}/>
         </div>
       </div>
     )
@@ -124,7 +124,7 @@ let PanelGroup = React.createClass({
               onDateClick={this.handleDate}
               onTimeClick={this.handleTime}/>
             <InfoPanel onClick={this.handleInfo} />
-            <InvitePanel addAttendee={this.handleAttendee} />
+            <InvitePanel addAttendee={this.handleAttendee} currentUser={this.props.currentUser}/>
             <ConfirmPanel
               availableDates={this.state.availableDates}
               day={this.state.day}
@@ -306,6 +306,20 @@ let InvitePanel = React.createClass({
     this.props.addAttendee({attendee: attendee})
   },
   render() {
+    if(this.props.currentUser.handle === '_alanbsmith') {
+      var formInfo =  <div>
+                        <p className='text-muted'>Add an attendee.</p>
+                        <div className='form-horizontal'>
+                          <input id='title' className='form-control' ref='attendee' placeholder="add a Twitter handle here! (e.g. @_alanbsmith)"></input>
+                          <button onClick={this.handleClick} id='attendee-btn' className='btn btn-block'>Next</button>
+                        </div>
+                      </div>
+    } else {
+      var formInfo = <div>
+                      <h4>Whoa, there!</h4>
+                      <h6>You need to <a href='http://127.0.0.1:3000/request_token'>sign in</a> before adding an attendee</h6>
+                    </div>
+    }
     return (
       <div className='panel panel-default'>
         <a id='invite-panel' data-toggle='collapse' data-parent='#accordion' href='#collapseThree' aria-expanded='true' aria-controls='collapseThree'>
@@ -315,14 +329,18 @@ let InvitePanel = React.createClass({
         </a>
         <div id='collapseThree' className='panel-collapse collapse' role='tabpanel' aria-labelledby='calendar'>
           <div className='panel-body'>
-            <p className='text-muted'>Add an attendee.</p>
-            <div className='form-horizontal'>
-              <input id='title' className='form-control' ref='attendee' placeholder="add a Twitter handle here! (e.g. @_alanbsmith)"></input>
-              <button onClick={this.handleClick} id='attendee-btn' className='btn btn-block'>Next</button>
-            </div>
+            {formInfo}
           </div>
         </div>
       </div>
+    )
+  }
+});
+
+let AuthenticateButton = React.createClass({
+  render() {
+    return(
+        <a href='http://127.0.0.1:3000/request_token' id='twitter-btn' className='btn btn-block'>Sign in with Twitter</a>
     )
   }
 });

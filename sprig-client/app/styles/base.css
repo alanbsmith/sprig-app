@@ -3,6 +3,7 @@ body {
 }
 
 a, a:active, a:hover, a:focus {
+  color: #00e59a;
   outline: 0;
   text-decoration: none;
 }
@@ -211,6 +212,17 @@ p {
   background-color: #ffca5b;
 }
 
+#twitter-btn {
+  background-color: #00adef;
+  font-size: 18px;
+  color: #ffffff;
+  border-radius: 0px;  
+}
+
+#twitter-btn:hover {
+  background-color: #3dc9ff;
+}
+
 #confirm-btn {
   background-color: #e5004b;
   margin-top: 20px;
@@ -287,7 +299,7 @@ p {
 .sidenav ul li a:hover, a:after {
   background-color: #00e59a;
   color: #ffffff;
-  margin-left: -5px;
+  margin-left: 0px;
 }
 
 .btn-default {

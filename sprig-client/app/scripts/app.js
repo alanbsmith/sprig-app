@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import Router from 'react-router';
 import { Route, Link, RouteHandler, DefaultRoute } from 'react-router';
+import Uri from 'jsuri';
 
 import About from './components/about';
 import CreateEvent from './components/create-event';
@@ -9,11 +10,36 @@ import Greeting from "./greeting";
 
 let App = React.createClass({
   getInitialState() {
-    return{renderStartButton: true, renderPanelGroup: false};
+    return{signedIn: false, currentUser: {handle: ''}};
   },
-  togglePanel(data) {
-    this.setState({renderStartButton: data.display});
-    this.setState({renderPanelGroup: data.start});
+  componentWillMount() {
+    var jwt = new Uri(location.search).getQueryParamValue('jwt');
+    if (!!jwt) {sessionStorage.setItem('jwt', jwt);}
+  },
+  componentDidMount() {
+    if (!!sessionStorage.getItem('jwt')) {this.currentUserFromAPI();}
+  },
+  currentUserFromAPI() {
+    this.readFromAPI('http://127.0.0.1:3000/current_user', function(user) {
+      this.setState({signedIn: true, currentUser: user});
+    }.bind(this));
+  },
+  getDefaultProps() {
+    return {origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : ''};
+  },
+  readFromAPI(url, successFunction) {
+    $.ajax({
+      url: url,
+      type: 'json',
+      method: 'get',
+      contentType: 'application/json',
+      headers: {'Authorization': sessionStorage.getItem('jwt')},
+      success: successFunction,
+      error: function(error) {
+        console.error(url, error['response']);
+        location = '/#/';
+      }
+    });
   },
   render() {
     return (
@@ -21,14 +47,24 @@ let App = React.createClass({
         <div className='container'>
           <TitlePanel/>
         </div>
-        <Sidebar/>
+        <Sidebar signedIn={this.state.signedIn} />
+        <RouteHandler currentUser={this.state.currentUser} signedIn={this.state.signedIn}/>
       </div>
     )
   }
 });
 
 let Sidebar = React.createClass({
+  handleSignOutLink() {
+    sessionStorage.setItem('jwt','');
+    location = '/';
+  },
   render() {
+    if (this.props.signedIn) {
+      var authLink = <li><a onClick={this.handleSignOutLink}>Sign Out</a></li>;
+    } else {
+      var authLink = <li><a href={"http://127.0.0.1:3000/request_token"}>Sign In</a></li>;
+    }
     return (
       <div>
         <div id="slideout">
@@ -38,17 +74,12 @@ let Sidebar = React.createClass({
             <div className="sidenav">
               <ul className='nav nav-sidebar'>
                 <li><Link to='app'>Home</Link></li>
-                <li><Link to="create-event">Create an Event</Link></li>
                 <li><Link to="about">About</Link></li>
-                <li><a href="http://127.0.0.1:3000/request_token">Sign In</a></li>
-                <li><a target='blank' href="https://github.com/alanbsmith/sprig-react">View The Repo</a></li>
-                <li><a target='blank' href="http://facebook.github.io/react/">Learn React</a></li>
-                <li><a target='blank' href="https://twitter.com/_alanbsmith">Twitter</a></li>
+                {authLink}
               </ul>
             </div>
           </div>   
         </div>
-        <RouteHandler/>
       </div>
     )
   }
@@ -67,14 +98,14 @@ let TitlePanel = React.createClass({
 
 let routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="create-event" path='/events/create' handler={CreateEvent}/>
-    <Route name="event" path='/events/:id' handler={Event}/>
+    <DefaultRoute name="create-event" path='/events/create' handler={CreateEvent}/>
     <Route name="about" path='/about' handler={About}/>
+    <Route name="event" path='/events/:id' handler={Event}/>
   </Route>
 );
 
 Router.run(routes, function(Handler) {
-  React.render(<Handler/>, document.body);
+  React.render(<Handler />, document.body);
 });
 
 
