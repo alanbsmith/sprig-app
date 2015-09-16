@@ -33,15 +33,18 @@ ActiveRecord::Schema.define(version: 20150912023731) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "title",       null: false
-    t.text     "description", null: false
-    t.string   "location",    null: false
-    t.string   "latitude",    null: false
-    t.string   "longitude",   null: false
+    t.string   "title",          null: false
+    t.text     "description",    null: false
+    t.string   "location",       null: false
+    t.string   "latitude",       null: false
+    t.string   "longitude",      null: false
     t.string   "url"
     t.string   "attendee"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "confirmed"
+    t.string   "confirmed_date"
+    t.string   "confirmed_time"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "oauths", force: :cascade do |t|

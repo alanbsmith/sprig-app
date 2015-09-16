@@ -1,11 +1,6 @@
 class Api::V1::EventsController < ApplicationController
 
-  def index
-    render json: Event.all
-  end
-
   def show
-    #binding.pry
     event = Event.find(params[:id])
     data  = build_response_data(event)
     render json: data
@@ -16,22 +11,12 @@ class Api::V1::EventsController < ApplicationController
     render json: event
   end
 
-  def destroy
+  def update
+    event = EventBuilder.update_confirmation(params)
+    render json: event
   end
 
 private
-
-  def event_params
-    params.require(:event).permit(
-                                    :title,
-                                    :description,
-                                    :start_time,
-                                    :end_time,
-                                    :location,
-                                    :latitude,
-                                    :longitude
-                                 )
-  end
 
   def build_response_data(event)
     data = {

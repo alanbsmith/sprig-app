@@ -354,7 +354,7 @@ let ConfirmPanel = React.createClass({
     $.ajax({
       url: "http://localhost:3000/api/v1/events/new",
       type: 'get',
-      data: {data:{title: this.props.info.title, description: this.props.info.description, location: this.props.info.location , availability: this.props.availableDates, attendee: this.props.attendee}},
+      data: {title: this.props.info.title, description: this.props.info.description, location: this.props.info.location , availability: this.props.availableDates, attendee: this.props.attendee},
       dataType: 'json',
       success: function(data) {
         console.log(data)

@@ -2,14 +2,17 @@ import React from 'react/addons';
 
 let CalendarPanel = React.createClass({
   getInitialState() {
-    return{selectedDate: '', isOpen: false}
+    return{selectedDate: '',
+      isOpen: false,
+      availableTimes: []
+    }
   },
   handleDateClick(date, i) {
     this.props.onDateClick(date);
-    this.setState({selectedDate: i})
+    this.setState({selectedDate: i, availableTimes: date.available_times})
   },
   handleTimeClick(time) {
-    this.props.onTimeClick({time: time});
+    this.props.onTimeClick(time);
   },
   render() {
     return (
@@ -25,11 +28,11 @@ let CalendarPanel = React.createClass({
             <div className='row' id='date-row'>
             {this.props.availableDates.map(function(date, i) {
               return (
-                <AvailableDate date={date} onClick={this.handleDateClick.bind(this, date, i)} key={i} isSelected={this.state.selectedDate === i ? true : false }/>
+                <AvailableDate date={date} onDateClick={this.handleDateClick.bind(this, date, i)} key={i} isSelected={this.state.selectedDate === i ? true : false }/>
               );
             }, this)}
             </div>
-          <TimeSlots availableTimes={this.props.availableTimes} onClick={this.handleTimeClick}/>
+          <TimeSlots availableTimes={this.state.availableTimes} onTimeClick={this.handleTimeClick}/>
           </div>
         </div>
       </div>
@@ -38,8 +41,8 @@ let CalendarPanel = React.createClass({
 });
 
 let AvailableDate = React.createClass({
-  handleClick(i) {
-    this.props.onClick({})
+  handleClick() {
+    this.props.onDateClick()
   },
   render() {
     let cx = React.addons.classSet;
@@ -49,7 +52,7 @@ let AvailableDate = React.createClass({
       'active': this.props.isSelected
     })
     return(
-      <div key={this.props.key} className='col-xs-1'><div onClick={this.handleClick.bind(this, this.props.key)} className={classes}><h5 className='date'>{this.props.date['date']}</h5>{this.props.date.display_day}</div></div>
+      <div key={this.props.key} className='col-xs-1'><div onClick={this.handleClick} className={classes}><h5 className='date'>{this.props.date['date']}</h5>{this.props.date.display_day}</div></div>
     )
   }
 });
@@ -58,9 +61,9 @@ let TimeSlots = React.createClass({
   getInitialState() {
     return{activeTimeSlot: ''}
   },
-  handleClick(i) {
-    this.props.onClick({time: this.props.availableTimes[i].time_slot});
-    this.setState({activeTimeSlot: i})
+  handleClick(time) {
+    this.props.onTimeClick(time)
+    this.setState({activeTimeSlot: time})
   },
   render() {
     return (
@@ -68,7 +71,7 @@ let TimeSlots = React.createClass({
         <h6 className='text-muted calendar-heading'>AVAILABILITY</h6>
         {this.props.availableTimes.map(function(time, i){
           return (
-            <TimeSlot time={time} onClick={this.handleClick.bind(this, i)} key={i} isSelected={this.state.activeTimeSlot === i ? true : false }/>
+            <TimeSlot time={time} onTimeClick={this.handleClick.bind(this, time)} key={i} isSelected={this.state.activeTimeSlot === time ? true : false }/>
           )
           
         }, this)}
@@ -78,8 +81,8 @@ let TimeSlots = React.createClass({
 });
 
 let TimeSlot = React.createClass({
-  handleClick(i) {
-    this.props.onClick({})
+  handleClick() {
+    this.props.onTimeClick()
   },
   render() {
     let cx = React.addons.classSet;

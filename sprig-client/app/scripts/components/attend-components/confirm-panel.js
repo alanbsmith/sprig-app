@@ -8,10 +8,12 @@ let ConfirmPanel = React.createClass({
     this.props.confirmation()
   },
   sendData() {
+    let date = this.props.selectedDate;
+    let time = this.props.selectedTime;
     $.ajax({
-      url: "",
-      type: 'get',
-      data: {data:{title: this.props.info.title, description: this.props.info.description, location: this.props.info.location ,time: this.props.time.time}},
+      url: "http://localhost:3000/api/v1/events/update",
+      type: 'put',
+      data: {event_id: date.event_id, selected_date: date, selected_time: time},
       dataType: 'json',
       success: function(data) {
         console.log(data)
@@ -19,6 +21,8 @@ let ConfirmPanel = React.createClass({
     })
   },
   render() {
+    console.log(this.props.selectedDate)
+    console.log(this.props.selectedTime)
     return (
       <div className='panel panel-default'>
         <a id='info-panel' data-toggle='collapse' data-parent='#accordion' href='#collapseFour' aria-expanded='true' aria-controls='collapseFour'>
@@ -30,8 +34,7 @@ let ConfirmPanel = React.createClass({
           <div className='panel-body' align='center'>
             <h4>Thanks!</h4>
             <p className='small'>PLEASE CONFIRM THE INFO BELOW IS CORRECT</p>
-            <p className='text-muted'>We have you set for {this.props.time} on {this.props.day}, {this.props.month} {this.props.date} at {this.props.info.location}.</p>
-
+            <p>We have you set for {this.props.time} on {this.props.day}, {this.props.month} {this.props.date} at <a id='map-link' href={"https://www.google.com/maps/place/" + this.props.info.location } target='_blank'>{this.props.info.location}</a>.</p>
             <button id="confirm-btn" onClick={this.handleClick} className="btn btn-block">Confirm?</button>
           </div>
         </div>

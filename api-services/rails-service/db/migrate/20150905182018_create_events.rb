@@ -8,6 +8,9 @@ class CreateEvents < ActiveRecord::Migration
       t.string  :longitude,    null: false
       t.string  :url
       t.string  :attendee
+      t.boolean :confirmed
+      t.string  :confirmed_date
+      t.string  :confirmed_time
       t.timestamps null: false
     end
   end

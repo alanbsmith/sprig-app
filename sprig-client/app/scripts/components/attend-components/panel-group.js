@@ -7,20 +7,19 @@ let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 let PanelGroup = React.createClass({
   getInitialState() {
-    return{ date: "__________",
-            time: "__________",
-            day: "",
-            month: "",
-            info: { title: "",
-                    description: "",
-                    location: "",
-                    lat: "",
-                    long: ""
+    return{ displayDay: '',
+            displayTime: '',
+            month: '',
+            date: '',
+            info: { title: '',
+                    description: '',
+                    location: '',
+                    lat: '',
+                    long: ''
                   },
-            dates: this.getNextWeek(),
-            times: [],
+            selectedTime: {},
+            selectedDate: {},
             availableDates: [],
-            availableTimes: [],
           }
   },
   componentDidMount() {
@@ -37,46 +36,35 @@ let PanelGroup = React.createClass({
             lat:         data['event']['latitude'],
             long:        data['event']['longitude'],
           },
-          availableDates: data.available_dates,
-          availableTimes: data.available_times
+          availableDates: this.getAvailableDates(data),
 
-                     })
+        })
       }.bind(this)
     })
   },
-  getNextWeek() {
-    let startDate = new Date();
-    let dates = [];
-    let days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday' ]
-    let months = ['January','February','March','April','May','June','July','August','September','October','November','December']
-    for(let x = 0; x < 7; x++) {
-      let parsedDate = startDate.toDateString().split(' ');
-      dates.push({'displayDay': parsedDate[0].toUpperCase(), 'month': months[startDate.getMonth()],'day': days[startDate.getDay()], 'date': startDate.getDate()})
-      startDate.setDate(startDate.getDate() + 1)
+  getAvailableDates(data) {
+    let availableDates = [];
+    for(let i = 0; i < data.available_dates.length; i ++) {
+      if(data.available_times[i].length > 0){
+        data.available_dates[i].available_times = data.available_times[i];
+        availableDates.push(data.available_dates[i]);
+      }
     }
-    return dates
+    return availableDates;
   },
-  getTimes() {
-    return([  {'timeSlot':'7:00 AM - 8:00 AM', 'displayTime': '7-8 AM'},
-              {'timeSlot':'8:00 AM - 9:00 AM', 'displayTime': '8-9 AM'},
-              {'timeSlot':'9:00 AM - 10:00 AM', 'displayTime': '9-10 AM'},
-              {'timeSlot':'10:00 AM - 11:00 AM', 'displayTime': '10-11 AM'},
-              {'timeSlot':'11:00 AM - 12:00 PM', 'displayTime': '11-12 PM'},
-              {'timeSlot':'12:00 PM - 1:00 PM', 'displayTime': '12-1 PM'},
-              {'timeSlot':'1:00 PM - 2:00 PM', 'displayTime': '1-2 PM'},
-              {'timeSlot':'2:00 PM - 3:00 PM', 'displayTime': '2-3 PM'},
-              {'timeSlot':'3:00 PM - 4:00 PM', 'displayTime': '3-4 PM'},
-              {'timeSlot':'4:00 PM - 5:00 PM', 'displayTime': '4-5 PM'},
-              {'timeSlot':'5:00 PM - 6:00 PM', 'displayTime': '5-6 PM'},
-              {'timeSlot':'6:00 PM - 7:00 PM', 'displayTime': '6-7 PM'}
-          ])
+  handleDate(date) {
+    this.setState({
+      selectedDate: date,
+      displayDay:    date.day,
+      month:        date.month,
+      date:         date.date
+    })
   },
-  handleDate(data) {    
-    this.setState({date: data.date, day: data.day, month: data.month, times: this.state.availableTimes[this.state.availableDates.indexOf(data)]})
-
-  },
-  handleTime(data) {
-    this.setState({time: data.time})
+  handleTime(time) {
+    this.setState({
+      selectedTime: time,
+      displayTime: time.time_slot
+    })
   },
   handleInfo(data) {
     this.setState({ info: { title: data.title, description: data.description, location: data.location }})
@@ -89,10 +77,23 @@ let PanelGroup = React.createClass({
       return(
         <ReactCSSTransitionGroup transitionName="example" transitionAppear={true}>
           <div className='panel-group' id='accordion' role='tablist' aria-multiselectable='true'>
-            <InvitePanel title={this.state.info.title} location={this.state.info.location} description={this.state.info.description}/>
-            <CalendarPanel availableDates={this.state.availableDates} availableTimes={this.state.times} onDateClick={this.handleDate} onTimeClick={this.handleTime}/>
-
-            <ConfirmPanel day={this.state.day} month={this.state.month} date={this.state.date} time={this.state.time} info={this.state.info} confirmation={this.handleConfirmation}/>
+            <InvitePanel 
+              title={this.state.info.title}
+              location={this.state.info.location}
+              description={this.state.info.description} />
+            <CalendarPanel 
+              availableDates={this.state.availableDates}
+              onDateClick={this.handleDate}
+              onTimeClick={this.handleTime} />
+            <ConfirmPanel 
+              day={this.state.displayDay}
+              month={this.state.month}
+              date={this.state.date}
+              time={this.state.displayTime}
+              info={this.state.info}
+              selectedDate={this.state.selectedDate}
+              selectedTime={this.state.selectedTime}
+              confirmation={this.handleConfirmation} />
           </div>
         </ReactCSSTransitionGroup>
     )} else {

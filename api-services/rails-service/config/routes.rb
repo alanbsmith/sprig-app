@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :available_dates, only: [:index, :show]
       resources :available_times, only: [:index, :show]
-      resources :events, only: [:index, :show, :create, :new, :destroy]
+      resources :events, only: [:show, :new, :update]
     end
   end
 
